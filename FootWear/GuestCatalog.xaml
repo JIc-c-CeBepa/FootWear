@@ -1,0 +1,51 @@
+﻿<Window x:Class="FootWear.GuestCatalog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FootWear"
+        xmlns:uc="clr-namespace:FootWear.UC"
+        mc:Ignorable="d"
+        Title="Каталог гостя" Height="1080" Width="1920" Icon="pack://application:,,,/res/Icon.ico" WindowState="Maximized">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="/res/Icon.JPG" Stretch="Uniform"/>
+            <Label Name="title" Grid.Column="1" Content="Гостевой каталог" FontFamily="Times New Roman" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="2" Margin="0,0,10,0" >
+                <Separator Height="70" Background="Transparent"/>
+                <!--<TextBox x:Name="SearchBar" TextWrapping="NoWrap" FontFamily="Times New Roman" FontSize="25" TextChanged="SearchBar_TextChanged" Height="30"/>
+                <Separator Height="10" Background="Transparent" />
+                <ComboBox SelectedIndex="0" Name="SortBar" SelectionChanged="SortBar_SelectionChanged" Height="30">
+                    <ComboBoxItem Content="Без сортировки" IsSelected="True"/>
+                    <ComboBoxItem Content="По возрастанию"/>
+                    <ComboBoxItem Content="По убыванию"/>
+                </ComboBox>
+                <Separator Height="10" Background="Transparent"/>
+                <ComboBox SelectedIndex="0" Name="FilterSupplierBar" SelectionChanged="FilterSupplierBar_SelectionChanged"  Height="30"/>
+                <Separator Height="10" Background="Transparent"/>-->
+                <Button x:Name="back" Click="back_Click" Content="Назад" Grid.Column="2" FontFamily="Times New Roman" FontSize="25" Width="200" Height="30" Background="#00FA9A" />    
+            </StackPanel>
+            
+
+        </Grid>
+
+        <ListView HorizontalContentAlignment="Stretch" x:Name="MainLW" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <uc:GuestCatalogElementControl1 DataContext="{Binding}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+    </Grid> 
+</Window>
