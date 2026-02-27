@@ -38,14 +38,25 @@ namespace FootWear
 
         private void AddNewGood_Click(object sender, RoutedEventArgs e)
         {
-            new NewRedactGood().ShowDialog();
+            var window = new NewRedactGood();
 
+            if (window.ShowDialog() == true)
+            {
+                LoadGoods(); 
+            }
         }
 
         private void MainLW_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Good good = MainLW.SelectedItem as Good;
-            new NewRedactGood(good).ShowDialog();
+            if (MainLW.SelectedItem is Good good)
+            {
+                var window = new NewRedactGood(good);
+
+                if (window.ShowDialog() == true)
+                {
+                    LoadGoods();
+                }
+            }
         }
 
         private void back_Click(object sender, RoutedEventArgs e)
