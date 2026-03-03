@@ -25,14 +25,20 @@ namespace FootWear
         {
             InitializeComponent();
             InitializeComponent();
-            FilterSupplierBar.ItemsSource = FootwearContext.db.Suppliers.Select(u => u.NameSupplier).ToList();
-            FilterSupplierBar.SelectedIndex = -1;
+            using var db = new FootwearContext();
+            foreach (var item in db.Suppliers.Select(u => u.NameSupplier).ToList()) 
+            {
+                FilterSupplierBar.Items.Add(item);
+            }
+            
+            
             LoadGoods();
             if (isAdmin)
             {
                 title.Content = "Каталог Администратора";
                 Title = "Каталог Администратора";
                 AddNewGood.Visibility = Visibility.Visible;
+                Orders.Visibility = Visibility.Visible;
             }
         }
 
@@ -67,7 +73,8 @@ namespace FootWear
 
         private void LoadGoods()
         {
-            MainLW.ItemsSource = FootwearContext.db.Goods.Include(u => u.CategoryNavigation).Include(u => u.SupplierNavigation).Include(u => u.ManufacturerNavigation).ToList();
+            using var db = new FootwearContext();
+            MainLW.ItemsSource = db.Goods.Include(u => u.CategoryNavigation).Include(u => u.SupplierNavigation).Include(u => u.ManufacturerNavigation).ToList();
         }
 
         private void SortBar_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -87,16 +94,21 @@ namespace FootWear
 
         private void ApplyFilter()
       {
-            if (FilterSupplierBar == null)
+            
+            if (FilterSupplierBar == null || MainLW == null)
             {
                 return;
             }
-
-            var allGoods = FootwearContext.db.Goods.Include(u => u.SupplierNavigation);
+            using var db = new FootwearContext();
+            var allGoods = db.Goods
+                .Include(u => u.CategoryNavigation)
+                .Include(u => u.SupplierNavigation)
+                .Include(u => u.ManufacturerNavigation)
+                .ToList();
             
             var searched = allGoods.Where(ProductMatchesSearch).ToList();
             var filtered = searched;
-            if (FilterSupplierBar.SelectedItem != null)
+            if (FilterSupplierBar.SelectedIndex != 0)
             {
                 string? a = FilterSupplierBar.SelectedItem.ToString();
                 filtered = searched.Where(u => u.SupplierNavigation.NameSupplier.ToString() == a).ToList();
@@ -105,11 +117,11 @@ namespace FootWear
             string? b = SortBar.SelectedItem.ToString().Substring(38);
             if (b == "По возрастанию")
             {
-                MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage);
+                MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).ToList();
             }
             else if (b == "По убыванию")
             {
-                MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).Reverse();
+                MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).Reverse().ToList();
             }
             else
             {
@@ -133,6 +145,10 @@ namespace FootWear
                 (product.SupplierNavigation.NameSupplier?.ToLower().Contains(search) ?? false);
         }
 
-        
+        private void Orders_Click(object sender, RoutedEventArgs e)
+        {
+            new Orders().Show();
+            this.Close();
+        }
     }
 }

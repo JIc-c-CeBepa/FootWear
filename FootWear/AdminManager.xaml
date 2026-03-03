@@ -32,11 +32,14 @@
                     <ComboBoxItem Content="По убыванию"/>
                 </ComboBox>
                 <Separator Height="10" Background="Transparent"/>
-                <ComboBox SelectedIndex="0" Name="FilterSupplierBar" SelectionChanged="FilterSupplierBar_SelectionChanged"  Height="30"/>
+                <ComboBox SelectedIndex="0" Name="FilterSupplierBar" SelectionChanged="FilterSupplierBar_SelectionChanged"  Height="30">
+                    <ComboBoxItem Content="Без сортировки" IsSelected="True"/>
+                </ComboBox>
                 <Separator Height="10" Background="Transparent"/>
-                <StackPanel  Orientation="Horizontal" >
-                    <Button x:Name="AddNewGood" Click="AddNewGood_Click"  Content="Добавить товар"  FontFamily="Times New Roman" FontSize="25"   Height="30" Background="#00FA9A" Visibility="Collapsed"/>
-                    <Button x:Name="back" Click="back_Click" Content="Назад"  FontFamily="Times New Roman" FontSize="25"   Height="30" Background="#00FA9A"/>
+                <StackPanel  Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Button x:Name="AddNewGood" Click="AddNewGood_Click"  Content="Добавить товар"  FontFamily="Times New Roman" FontSize="20"   Height="30" Background="#00FA9A" Visibility="Collapsed" HorizontalAlignment="Stretch"/>
+                    <Button x:Name="Orders" Click="Orders_Click"  Content="Заказы"  FontFamily="Times New Roman" FontSize="20"   Height="30" Background="#00FA9A" Visibility="Collapsed" HorizontalAlignment="Stretch"/>
+                    <Button x:Name="back" Click="back_Click" Content="Назад"  FontFamily="Times New Roman" FontSize="20"   Height="30" Background="#00FA9A" HorizontalAlignment="Stretch"/>
                 </StackPanel>
                 
             </StackPanel>

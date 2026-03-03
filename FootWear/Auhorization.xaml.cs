@@ -21,20 +21,24 @@ namespace FootWear
     /// </summary>
     public partial class Auhorization : Window
     {
-
+        
         public Auhorization()
         {
             InitializeComponent();
+            FootwearContext db = new FootwearContext();
+            db.Users.Any();
         }
 
         private void auth_Click(object sender, RoutedEventArgs e)
         {
-            if(String.IsNullOrWhiteSpace(password.Text)|| String.IsNullOrWhiteSpace(login.Text))
+            FootwearContext db = new FootwearContext();
+            if (String.IsNullOrWhiteSpace(password.Text)|| String.IsNullOrWhiteSpace(login.Text))
             {
                 MessageBox.Show("Заполните поля");
                 return;
             }
-            User user = FootwearContext.db.Users
+            
+            User user = db.Users
                 .Include(u => u.RoleNavigation)
                 .FirstOrDefault(u => u.Login == login.Text && u.Password == password.Text);
             if (user != null)
@@ -43,24 +47,28 @@ namespace FootWear
                 {
                     MessageBox.Show("Добро пожаловать", "Успешно", MessageBoxButton.OK);
                     new GuestCatalog(false).Show();
+                    
                     this.Close();
                 }
                 else if(user.RoleNavigation.NameRole == "Администратор")
                 {
                     MessageBox.Show("Добро пожаловать", "Успешно", MessageBoxButton.OK);
                     new AdminManager(true).Show();
+                    
                     this.Close();
                 }
                 else if (user.RoleNavigation.NameRole == "Менеджер")
                 {
                     MessageBox.Show("Добро пожаловать", "Успешно", MessageBoxButton.OK);
                     new AdminManager(false).Show();
+                    
                     this.Close();
                 }
                 else
                 {
                     MessageBox.Show("Добро пожаловать","Успешно",MessageBoxButton.OK);
                     new GuestCatalog(true).Show();
+                    
                     this.Close();
                 }
             }
@@ -77,8 +85,10 @@ namespace FootWear
 
         private void guest_Click(object sender, RoutedEventArgs e)
         {
+            
             MessageBox.Show("Добро пожаловать", "Успешно", MessageBoxButton.OK);
             new GuestCatalog(true).Show();
+            
             this.Close();
         }
     }

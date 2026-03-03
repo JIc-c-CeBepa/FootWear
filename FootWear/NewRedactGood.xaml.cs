@@ -131,29 +131,30 @@ namespace FootWear
 
         private void AddGood(decimal price, int amount, int discount, bool isEdit )
         {
+            using var db = new FootwearContext();
             Good newGood = new Good();
             if (isEdit)
             {
-                newGood = FootwearContext.db.Goods.FirstOrDefault(u=> u.Artikle == Artikle);
+                newGood = db.Goods.FirstOrDefault(u=> u.Artikle == Artikle);
             }
             else
             {
                 newGood.Artikle = GenerateArtickle();
-                FootwearContext.db.Goods.Add(newGood);
+                db.Goods.Add(newGood);
             }
 
             newGood.Photo = photoBytes;
             newGood.NameGood = NameGood.Text;
-            newGood.Category = FootwearContext.db.Categories.First(u => u.NameCategory == CategoryGood.SelectedItem.ToString()).Idcategory;
+            newGood.Category = db.Categories.First(u => u.NameCategory == CategoryGood.SelectedItem.ToString()).Idcategory;
             newGood.Description = DescriptionGood.Text;
-            newGood.Manufacturer = FootwearContext.db.Manufacturers.First(q => q.NameManufacturer == ManufacturerGood.SelectedItem.ToString()).Idmanufacturer;
-            newGood.Supplier = FootwearContext.db.Suppliers.First(q => q.NameSupplier == SupplierGood.SelectedItem.ToString()).Idsupplier;
+            newGood.Manufacturer = db.Manufacturers.First(q => q.NameManufacturer == ManufacturerGood.SelectedItem.ToString()).Idmanufacturer;
+            newGood.Supplier = db.Suppliers.First(q => q.NameSupplier == SupplierGood.SelectedItem.ToString()).Idsupplier;
             newGood.Price = price;
             newGood.Unit = UnitGood.SelectedItem.ToString();
             newGood.AmountOnStorage = amount;
             newGood.CurrentDiscount = discount;
 
-            FootwearContext.db.SaveChanges();
+            db.SaveChanges();
             MessageBox.Show("Сохранено", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
             DialogResult = true;
             this.Close();
@@ -163,6 +164,7 @@ namespace FootWear
 
         private string GenerateArtickle()
         {
+            using var db = new FootwearContext();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             string article;
 
@@ -173,54 +175,57 @@ namespace FootWear
                     .Select(s => s[random.Next(s.Length)])
                     .ToArray());
             }
-            while (FootwearContext.db.Goods.Any(g => g.Artikle == article));
+            while (db.Goods.Any(g => g.Artikle == article));
 
             return article;
         }
 
         private void ImageGood_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
-            byte[] bytes = File.ReadAllBytes(openFileDialog.FileName);
-            if (openFileDialog.ShowDialog() == true)
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(openFileDialog.FileName);
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.EndInit();
-                bitmap.Freeze();
+                Filter = "Image files (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg"
+            };
 
-                
-                if (bitmap.PixelWidth > 300 || bitmap.PixelHeight > 200)
-                {
-                    MessageBox.Show("Размер изображения не должен превышать 200x300 пикселей!",
-                                    "Ошибка",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Warning);
-                    return;
-                }
+            if (openFileDialog.ShowDialog() != true)
+                return;
 
-                photoBytes = bytes;
-                ImageGood.Source = bitmap;
+            byte[] bytes = File.ReadAllBytes(openFileDialog.FileName);
+
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(openFileDialog.FileName);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            if (bitmap.PixelWidth > 300 || bitmap.PixelHeight > 200)
+            {
+                MessageBox.Show("Размер изображения не должен превышать 300x200", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
+
+            ImageGood.Source = bitmap;
+            photoBytes = bytes; // если у тебя так сохраняется в BLOB
         }
-        
+
         public void LoadCBs()
         {
+            using var db = new FootwearContext();
             //категория производитель поставщик единица измерения
-            CategoryGood.ItemsSource = FootwearContext.db.Categories.Select(u => u.NameCategory).ToList();
-            SupplierGood.ItemsSource = FootwearContext.db.Suppliers.Select(u => u.NameSupplier).ToList();
-            ManufacturerGood.ItemsSource = FootwearContext.db.Manufacturers.Select(u => u.NameManufacturer).ToList();
-            UnitGood.ItemsSource = FootwearContext.db.Goods.Select(u => u.Unit).Distinct().ToList();
+            CategoryGood.ItemsSource = db.Categories.Select(u => u.NameCategory).ToList();
+            SupplierGood.ItemsSource = db.Suppliers.Select(u => u.NameSupplier).ToList();
+            ManufacturerGood.ItemsSource = db.Manufacturers.Select(u => u.NameManufacturer).ToList();
+            UnitGood.ItemsSource = db.Goods.Select(u => u.Unit).Distinct().ToList();
             UnitGood.SelectedIndex = 0;
             UnitGood.IsEnabled = false;
         }
 
         public void LoadInfo(Good good) 
         {
-            if(good.Photo == null)
+            
+            if (good.Photo == null)
             {
                 ImageGood.Source = new BitmapImage(new Uri("/res/picture.png", UriKind.Relative));
             }

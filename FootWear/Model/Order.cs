@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace FootWear.Model;
 
@@ -24,4 +25,18 @@ public partial class Order
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
     public virtual PickUpPoint? PickUpPointAdressNavigation { get; set; }
+
+    public string ArtikleList
+    {
+        get
+        {
+            
+
+            return string.Join(", ",
+                OrderItems
+                    .Where(i => !string.IsNullOrWhiteSpace(i.Articke))
+                    .Select(i => i.Articke));
+        }
+    }
+
 }

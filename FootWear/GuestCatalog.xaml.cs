@@ -43,71 +43,11 @@ namespace FootWear
             
         private void LoadGoods()
         {
-            MainLW.ItemsSource = FootwearContext.db.Goods.Include(u => u.CategoryNavigation).Include(u => u.SupplierNavigation).Include(u => u.ManufacturerNavigation);
+            using  var db = new FootwearContext(); 
+            MainLW.ItemsSource = db.Goods.Include(u => u.CategoryNavigation).Include(u => u.SupplierNavigation).Include(u => u.ManufacturerNavigation).ToList();
         }
 
-        //private void SortBar_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    ApplyFilter();
-        //}
-
-        //private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    ApplyFilter();
-        //}
-
-        //private void FilterSupplierBar_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    ApplyFilter();
-        //}
-
-        //private void ApplyFilter()
-        //{
-        //    if (FilterSupplierBar == null)
-        //    {
-        //        return;
-        //    }
-            
-        //    var allGoods = FootwearContext.db.Goods.Include(u => u.SupplierNavigation);
-        //    var searched = allGoods.Where(ProductMatchesSearch);
-        //    var filtered = searched;
-        //    if(FilterSupplierBar.SelectedItem != null)
-        //    {
-        //        filtered = searched.Where(u => u.SupplierNavigation.NameSupplier == FilterSupplierBar.SelectedItem);
-        //    }
-            
-        //    if(SortBar.SelectedItem.ToString() == "По возрастанию")
-        //    {
-        //        MainLW.ItemsSource = filtered.OrderBy(u=> u.AmountOnStorage);
-        //    }
-        //    else if (SortBar.SelectedItem.ToString() == "По убыванию")
-        //    {
-        //        MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).Reverse();
-        //    }
-        //    else
-        //    {
-        //        MainLW.ItemsSource = filtered.ToList();
-        //    }
-            
-                
-
-        //}
-        //private bool ProductMatchesSearch(Good product)
-        //{
-        //    if (product == null)
-        //        return false;
-
-        //    if (string.IsNullOrWhiteSpace(SearchBar.Text))
-        //        return true;
-
-        //    string search = SearchBar.Text.ToLower();
-            
-        //    return
-        //        (product.NameGood?.ToLower().Contains(search) ?? false) ||
-        //        (product.Description?.ToLower().Contains(search) ?? false) ||
-        //        (product.ManufacturerNavigation.NameManufacturer?.ToLower().Contains(search) ?? false) ||
-        //        (product.SupplierNavigation.NameSupplier?.ToLower().Contains(search) ?? false);
-        //}
+        
         
     }
 }

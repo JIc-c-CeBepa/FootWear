@@ -7,7 +7,7 @@ namespace FootWear.Model;
 
 public partial class FootwearContext : DbContext
 {
-    public static FootwearContext db { get; private set; } = new FootwearContext();
+    //public static FootwearContext db { get; private set; } = new FootwearContext();
     public FootwearContext()
     {
     }

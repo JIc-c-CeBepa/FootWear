@@ -14,6 +14,13 @@ public partial class PickUpPoint
     public string? Street { get; set; }
 
     public string? HouseNum { get; set; }
+    public string FullAddress
+    {
+        get
+        {
+            return $"{City}, {Street}, {HouseNum}";
+        }
+    }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }
