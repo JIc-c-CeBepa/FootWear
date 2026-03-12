@@ -48,6 +48,13 @@
         </Grid>
 
         <ListView HorizontalContentAlignment="Stretch" x:Name="MainLW" Grid.Row="1" MouseDoubleClick="MainLW_MouseDoubleClick">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Удалить товар" Click="MenuItem_Click"/>
+
+
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <uc:GuestCatalogElementControl1 DataContext="{Binding}"/>

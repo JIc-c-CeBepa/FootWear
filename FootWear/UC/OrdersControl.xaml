@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock  Grid.Column="1" Text="{Binding DateDeliver, StringFormat=Дата доставки: {0}}" FontFamily="Times New Roman" TextWrapping="Wrap" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
+        <TextBlock  Grid.Column="1" Text="{Binding datedeliver, StringFormat=Дата доставки: {0}}" FontFamily="Times New Roman" TextWrapping="Wrap" Height="40" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25"/>
 
         <Grid Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -32,7 +32,7 @@
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ArtikleList, StringFormat=Артикул заказа: {0}}" FontFamily="Times New Roman" TextWrapping="Wrap" FontSize="25"/>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Status, StringFormat=Статус заказа: {0}}" FontFamily="Times New Roman" FontSize="25"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding PickUpPointAdressNavigation.FullAddress,StringFormat=Адрес ПВ: {0}}" FontFamily="Times New Roman" FontSize="25"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding DateStartOrder, StringFormat=Дата заказа: {0}}" FontFamily="Times New Roman" FontSize="25"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding dateStart, StringFormat=Дата заказа: {0}}" FontFamily="Times New Roman" FontSize="25"/>
         </Grid>
      
     </Grid>

@@ -55,7 +55,20 @@ namespace FootWear.UC
             {
                 goodImage.Source = new BitmapImage(new Uri("/res/picture.png", UriKind.Relative));
             }
-            categoryGood.Text = $"{good.CategoryNavigation.NameCategory} | {good.NameGood}";
+            if(good.CategoryNavigation == null)
+            {
+                goodImage.Visibility = Visibility.Collapsed;
+                Amount.Visibility = Visibility.Collapsed;
+                Unittb.Visibility = Visibility.Collapsed;
+                discountPanel.Visibility = Visibility.Collapsed;
+                Discount.Visibility = Visibility.Collapsed;
+                return;
+            }
+            else
+            {
+                categoryGood.Text = $"{good.CategoryNavigation.NameCategory} | {good.NameGood}";
+            }
+            
             
         }
 

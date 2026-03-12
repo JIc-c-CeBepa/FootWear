@@ -45,6 +45,10 @@ namespace FootWear
             {
                 LoadOrdes();
             }
+            else
+            {
+                LoadOrdes();
+            }
         }
 
         private void back_Click(object sender, RoutedEventArgs e)

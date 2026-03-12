@@ -24,6 +24,7 @@ namespace FootWear
     {
         bool isEdit;
         string Artikle;
+        public byte[] bytes { get; set; }
         
         private byte[] photoBytes;
         public NewRedactGood()
@@ -34,6 +35,7 @@ namespace FootWear
             Title = "Добавление нового товара";
             isEdit = false;
             LoadCBs();
+            DataContext = this;
         }
         public NewRedactGood(Good good)
         {
@@ -52,8 +54,7 @@ namespace FootWear
         {
             if(ImageGood.Source == null)
             {
-                MessageBox.Show("Добавьте изображение", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                ImageGood.Source = new BitmapImage(new Uri("/res/picture.png", UriKind.Relative));
             }
             if (String.IsNullOrWhiteSpace(NameGood.Text))
             {
@@ -100,9 +101,9 @@ namespace FootWear
             }
             if (int.TryParse(AmountOnSrtorageGood.Text, out int amount))
             {
-                if (amount < 0)
+                if (amount <= 0)
                 {
-                    MessageBox.Show("Количество на складе не должно быть меньше 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Количество на складе не должно быть меньше или равно 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -116,6 +117,11 @@ namespace FootWear
                 if (discout < 0)
                 {
                     MessageBox.Show("Размер скидки не должен быть меньше 0", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (discout >= 100)
+                {
+                    MessageBox.Show("Размер скидки не должен быть больше  100", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -190,7 +196,7 @@ namespace FootWear
             if (openFileDialog.ShowDialog() != true)
                 return;
 
-            byte[] bytes = File.ReadAllBytes(openFileDialog.FileName);
+            bytes = File.ReadAllBytes(openFileDialog.FileName);
 
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
@@ -207,7 +213,7 @@ namespace FootWear
             }
 
             ImageGood.Source = bitmap;
-            photoBytes = bytes; // если у тебя так сохраняется в BLOB
+            photoBytes = bytes; 
         }
 
         public void LoadCBs()

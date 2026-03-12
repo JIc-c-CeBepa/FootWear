@@ -26,6 +26,22 @@ public partial class Order
 
     public virtual PickUpPoint? PickUpPointAdressNavigation { get; set; }
 
+    public string dateStart 
+    {
+        get
+        {
+             return DateStartOrder.Value.ToString("dd.MM.yyyy");
+        }
+    }
+
+    public string datedeliver
+    {
+        get
+        {
+            return DateDeliver.Value.ToString("dd.MM.yyyy");
+        }
+    }
+
     public string ArtikleList
     {
         get

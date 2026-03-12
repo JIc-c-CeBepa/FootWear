@@ -93,7 +93,12 @@ namespace FootWear
         }
 
         private void ApplyFilter()
-      {
+        {
+            Good good = new Good();
+            good.Description = "Товаров не найдено";
+            List<Good> def = new List<Good>();
+            def.Add(good);
+
             
             if (FilterSupplierBar == null || MainLW == null)
             {
@@ -107,6 +112,7 @@ namespace FootWear
                 .ToList();
             
             var searched = allGoods.Where(ProductMatchesSearch).ToList();
+            
             var filtered = searched;
             if (FilterSupplierBar.SelectedIndex != 0)
             {
@@ -117,15 +123,28 @@ namespace FootWear
             string? b = SortBar.SelectedItem.ToString().Substring(38);
             if (b == "По возрастанию")
             {
+
                 MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).ToList();
+                if (filtered.OrderBy(u => u.AmountOnStorage).ToList().Count == 0)
+                {
+                    MainLW.ItemsSource = def;
+                }
             }
             else if (b == "По убыванию")
             {
                 MainLW.ItemsSource = filtered.OrderBy(u => u.AmountOnStorage).Reverse().ToList();
+                if (filtered.OrderBy(u => u.AmountOnStorage).Reverse().ToList().Count == 0)
+                {
+                    MainLW.ItemsSource = def;
+                }
             }
             else
             {
                 MainLW.ItemsSource = filtered.ToList();
+                if (filtered.ToList().Count == 0)
+                {
+                    MainLW.ItemsSource = def;
+                }
             }
         }
         private bool ProductMatchesSearch(Good product)
@@ -149,6 +168,34 @@ namespace FootWear
         {
             new Orders().Show();
             this.Close();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            using var db = new FootwearContext();
+            if (MainLW.SelectedItem is Good good)
+            {
+                if (db.OrderItems.FirstOrDefault(u=> u.Articke == good.Artikle) != null)
+                {
+                    MessageBox.Show("Товар находиться в коризине", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                else
+                {
+                    if(MessageBox.Show("Вы точно хотите удалить товар?", "Внимание", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        db.Goods.Remove(good);
+                        MessageBox.Show("Товар удален", "Успешно", MessageBoxButton.OK);
+                        db.SaveChanges();
+                        LoadGoods();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    
+                }
+            }
         }
     }
 }

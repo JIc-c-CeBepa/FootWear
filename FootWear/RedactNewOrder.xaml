@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FootWear"
         mc:Ignorable="d"
-            Title="NewRedactGood" Height="500" Width="400" WindowStartupLocation="CenterScreen">
+            Title="NewRedactGood" Height="500" Width="400" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/res/Icon.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -34,7 +34,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Артикул(через запятую если несколько)" Grid.Row="0"/>
-            <TextBox Name="ArtickleOrder" Grid.Row="1" FontFamily="Times New Roman" FontSize="20" MaxLength="6"/>
+            <TextBox Name="ArtickleOrder" Grid.Row="1" FontFamily="Times New Roman" FontSize="20" />
         </Grid>
 
         
@@ -54,7 +54,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Адрес ПВ" Grid.Row="0"/>
-            <ComboBox Name="AdressPickUpPoint" Grid.Row="1" FontFamily="Times New Roman" FontSize="16"/>
+            <ComboBox Name="AdressPickUpPoint" Grid.Row="1" FontFamily="Times New Roman" FontSize="16" DisplayMemberPath="FullAddress"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="5">

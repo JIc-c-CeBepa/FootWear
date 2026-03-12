@@ -35,13 +35,13 @@
                 <TextBlock Text="{Binding priceFormated }" Foreground="Black" Margin="8,0,0,0" FontFamily="Times New Roman"/>
             </StackPanel>
             <TextBlock Name="PriceTb" Grid.Row="5" Text="{Binding Price}" Foreground="Black" Margin="8,0,0,0" FontFamily="Times New Roman" Visibility="Hidden"/>
-            <TextBlock Grid.Row="6" Text="{Binding Unit, StringFormat=Единица измерения: {0}}" FontFamily="Times New Roman"/>
+            <TextBlock Name="Unittb" Grid.Row="6" Text="{Binding Unit, StringFormat=Единица измерения: {0}}" FontFamily="Times New Roman"/>
             <TextBlock Name="Amount" Grid.Row="7" Text="{Binding AmountOnStorage, StringFormat=Количество на складе: {0}}" FontFamily="Times New Roman"/>
             
             
         </Grid>
 
-        <Label Grid.Column="2" Content="{Binding CurrentDiscountS, StringFormat={}{0}}" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Label Name="Discount" Grid.Column="2" Content="{Binding CurrentDiscountS, StringFormat={}{0}}" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
 
 

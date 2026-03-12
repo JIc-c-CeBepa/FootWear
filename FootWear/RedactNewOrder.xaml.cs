@@ -1,6 +1,7 @@
 ﻿using FootWear.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace FootWear
     {
         int idOrder;
         bool isEdit = false;
+        List<PickUpPoint> pickUpPoints;
         public RedactNewOrder()
         {
             InitializeComponent();
@@ -48,8 +50,9 @@ namespace FootWear
         {
             using var db = new FootwearContext();
             StatusOrder.ItemsSource = db.Orders.Select(u=> u.Status).Distinct().ToList();
-            AdressPickUpPoint.ItemsSource = db.PickUpPoints.Select(u=>u.FullAddress).ToString();
-            ClientId.ItemsSource = db.Users.Select(u => u.Iduser);
+            pickUpPoints = db.PickUpPoints.ToList();
+            AdressPickUpPoint.ItemsSource = pickUpPoints;//.Select(u=>u.FullAddress).ToList();
+            ClientId.ItemsSource = db.Users.Select(u => u.Iduser).ToList();
         }
 
         private void DateStartPicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -83,6 +86,7 @@ namespace FootWear
 
         private void LoadInfo(Order order)
         {
+            using var db = new FootwearContext();
             DateStartPicker.SelectedDate = order.DateStartOrder.HasValue
                 ? order.DateStartOrder.Value.ToDateTime(TimeOnly.MinValue)
                 : (DateTime?)null;
@@ -92,8 +96,11 @@ namespace FootWear
                 : (DateTime?)null;
 
             ArtickleOrder.Text = order.ArtikleList.ToString();
-            AdressPickUpPoint.SelectedIndex = AdressPickUpPoint.Items.IndexOf(order.PickUpPointAdress);
+            PickUpPoint a = pickUpPoints.FirstOrDefault(u => u.IdPickUpPint == order.PickUpPointAdressNavigation.IdPickUpPint);
+            AdressPickUpPoint.SelectedIndex = AdressPickUpPoint.Items.IndexOf(a);
+            
             StatusOrder.SelectedIndex = StatusOrder.Items.IndexOf(order.Status);
+            ClientId.SelectedItem = order.ClientId;
 
         }
 
@@ -101,12 +108,13 @@ namespace FootWear
         {
             
             AddOrder(idOrder);
+            this.Close();
         }
 
         private void AddOrder(int idOrder)
         {
             using var db = new FootwearContext();
-            Order order;
+            Order order = new Order();
 
             if (isEdit)
             {
@@ -115,14 +123,15 @@ namespace FootWear
             }
             else
             {
-                order = new Order();
+                
                 db.Orders.Add(order);
+                db.SaveChanges();
             }
 
             order.DateStartOrder = DateOnly.FromDateTime(DateStartPicker.SelectedDate.Value);
             order.DateDeliver = DateOnly.FromDateTime(DateDeliverPicker.SelectedDate.Value);
             order.PickUpPointAdress = db.PickUpPoints
-                .First(q => q.FullAddress == AdressPickUpPoint.SelectedItem.ToString())
+                .FirstOrDefault(q => q == AdressPickUpPoint.SelectedItem as PickUpPoint)
                 .IdPickUpPint;
 
             order.ClientId = Convert.ToInt32(ClientId.SelectedItem.ToString());
@@ -163,16 +172,22 @@ namespace FootWear
             }
 
             
-            var newItems = artikleList.Select(a => new OrderItem
+            List<OrderItem> newItems = artikleList.Select(a => new OrderItem
             {
                 IdOrder = order.Idorder,
                 Articke = a, 
                 Amount = 1
-            });
+            }).ToList();
 
-            db.OrderItems.AddRange(newItems);
+            foreach(var a in newItems)
+            {
+                db.OrderItems.Add(a);
+                db.SaveChanges();
+            }
 
-            db.SaveChanges();
+            
+
+            
         }
     }
 

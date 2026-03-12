@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FootWear"
         mc:Ignorable="d"
-        Title="NewRedactGood" Height="750" Width="600" WindowStartupLocation="CenterScreen">
+        Title="NewRedactGood" Height="750" Width="600" WindowStartupLocation="CenterScreen" Icon="pack://application:,,,/res/Icon.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -35,7 +35,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="0.2*"/>
             </Grid.RowDefinitions>
-            <Image Name="ImageGood" Grid.Row="0" Width="300" Height="100" Stretch="Uniform" MouseDown="ImageGood_MouseDown" />
+            <Image Name="ImageGood" Source="{Binding bytes}" Grid.Row="0" Width="300" Height="100" Stretch="Uniform" MouseDown="ImageGood_MouseDown" />
             <Label  Content="Фотография" Grid.Row="1" HorizontalContentAlignment="Center" MouseDown="ImageGood_MouseDown"/>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="2">
